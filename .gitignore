@@ -11,7 +11,7 @@
 *.userprefs
 
 # Config files with secrets, etc.
-.config
+*.config
 
 # Build results
 [Dd]ebug/
