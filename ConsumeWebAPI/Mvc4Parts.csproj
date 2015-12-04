@@ -164,8 +164,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helper\ClientSecret.cs" />
     <Compile Include="Helper\IPartRestClient.cs" />
     <Compile Include="Helper\PartRestClient.cs" />
+    <Compile Include="Helper\TokenEndpoint.cs" />
     <Compile Include="Models\PartModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -205,8 +207,11 @@
     <Content Include="Content\themes\base\tooltip.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="LICENSE" />
     <Content Include="PlexConnectConfig.json" />
+    <Content Include="PlexConnectConfig.json.sample" />
     <None Include="Properties\PublishProfiles\consumewebapi.pubxml" />
+    <Content Include="README.md" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />

@@ -1,7 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Net;
+using System.Web;
+using System.Linq;
 using ConsumeWebAPI.Models;
 using RestSharp;
 using Newtonsoft.Json.Linq;
@@ -12,27 +15,36 @@ namespace ConsumeWebAPI.Helper
   public class PartRestClient : IPartRestClient
   {
     private readonly RestClient _client;
-    private readonly string _url = ConfigurationManager.AppSettings["webapibaseurl"];
-    static string clientObjectId = ConfigurationManager.AppSettings["ida:ClientObjectId"];
+    private Uri _tokenEndpoint;
+    private string _clientId;
 
     public PartRestClient()
     {
-      _client = new RestClient(_url);
+      _client = new RestClient(_tokenEndpoint);
     }
 
     public IEnumerable<PartModel> GetSeveral()
     {
-    // 0. Get settings from JSON config file
+      // 0. Get settings from JSON config file
+      // below from http://stackoverflow.com/questions/10951599/getting-current-directory-in-net-web-application, better than System.Reflection.Assembly.GetExecutingAssembly().Location
+      // todo: optimize this with caching
+      string exeRuntimeDirectory = System.IO.Path.GetDirectoryName(HttpRuntime.AppDomainAppPath);
+      TokenEndpoint tokenEndpoint = JsonConvert.DeserializeObject<TokenEndpoint>(File.ReadAllText(exeRuntimeDirectory + @"\PlexConnectConfig.json"));
 
+      _tokenEndpoint = tokenEndpoint.tokenEndPoint;
+      _clientId = tokenEndpoint.clientId;
+
+      // use the secret with the furthest out expiry. Use the JSON configuration file to manage your rolling secrets 
+      List<ClientSecret> SortedClientSecretList = tokenEndpoint.clientSecrets.OrderByDescending(o => o.expiry).ToList();
 
       // 1. get the bearer token
-      var restClient = new RestClient(ConfigurationManager.AppSettings["ida:TokenEndPoint"]);
+      var restClient = new RestClient(_tokenEndpoint);
       var request = new RestRequest(Method.POST);
       request.AddHeader("content-type", "application/x-www-form-urlencoded");
       request.AddHeader("cache-control", "no-cache");
-      string clientId = ConfigurationManager.AppSettings["ida:ClientId"];
-      string clientSecret = ConfigurationManager.AppSettings["ida:AppKey"];      
-      request.AddParameter("application/x-www-form-urlencoded", "grant_type=client_credentials&resource=" + ConfigurationManager.AppSettings["ida:PlexResource"] + "&client_secret=" + System.Uri.EscapeDataString(clientSecret) + "&client_id=" + clientId, ParameterType.RequestBody);
+      string clientId = _clientId;
+      string clientSecret = SortedClientSecretList[0].clientSecret;
+      request.AddParameter("application/x-www-form-urlencoded", "grant_type=client_credentials&resource=" + tokenEndpoint.plexResource.ToString() + "&client_secret=" + System.Uri.EscapeDataString(clientSecret) + "&client_id=" + clientId, ParameterType.RequestBody);
       IRestResponse response = restClient.Execute(request);
 
       // 2. extract bearer token from JSON response
