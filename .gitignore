@@ -11,7 +11,7 @@
 *.userprefs
 
 # Config files with secrets, etc.
-*.config
+PlexConnectConfig.json
 
 # Build results
 [Dd]ebug/
