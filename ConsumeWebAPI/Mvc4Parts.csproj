@@ -208,9 +208,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="LICENSE" />
-    <Content Include="U:\Apps\API Management\PlexConnectConfig.json">
-      <Link>PlexConnectConfig.json</Link>
-    </Content>
+    <Content Include="PlexConnectConfig.json" />
     <Content Include="PlexConnectConfig.json.sample" />
     <None Include="Properties\PublishProfiles\consumewebapi.pubxml" />
     <Content Include="README.md" />
