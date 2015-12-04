@@ -11,7 +11,7 @@
 *.userprefs
 
 # Config files with secrets, etc.
-# PlexConnectConfig.json
+PlexConnectConfig.json
 
 # Build results
 [Dd]ebug/
