@@ -142,7 +142,9 @@ namespace ConsumeWebAPI.Helper
       var response = _client.Execute<PartModel>(request);
 
       if (response.StatusCode == HttpStatusCode.NotFound)
+      {
         throw new Exception(response.ErrorMessage);
+      }
     }
   }
 }
