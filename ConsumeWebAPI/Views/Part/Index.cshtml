@@ -1,0 +1,91 @@
+﻿@model IEnumerable<ConsumeWebAPI.Models.PartModel>
+
+@{
+    ViewBag.Title = "Parts";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Consume Asp.net WebAPI :: Server Data</h2>
+
+<article>
+    <p>
+        Here you can manipulate server data.
+    </p>
+
+    <p>
+        @Html.ActionLink("Create New", "Create", null, new { @class = "actionlinkbutton" })
+    </p>
+
+    <div>
+        <table>
+
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PartKey)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PartNo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Revision)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PartStatus)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PartType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PartType)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PartKey)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PartNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Revision)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PartStatus)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PartType)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.PartKey}) |
+                        @Html.ActionLink("Details", "Details", new { id = item.PartKey}) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.PartKey})
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+</article>
+
+<aside>
+    <h3>Navigation</h3>
+    <p>
+        From here you can navigate other parts of app.
+    </p>
+    <ul>
+        <li>@Html.ActionLink("Home", "Index", "Home")</li>
+        <li>@Html.ActionLink("Manipulate Data", "Index", "part")</li>
+        <li>@Html.ActionLink("About", "About", "Home")</li>
+        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+    </ul>
+</aside>
