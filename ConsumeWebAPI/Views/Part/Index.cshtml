@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Part List</h2>
+<h2>Parts starting with a "z"</h2>
 
 <article>
 @*    <p>
@@ -44,7 +44,16 @@
                 <th></th>
             </tr>
 
-            @foreach (var item in Model)
+            @if(Model==null)
+            {
+                <tr>
+                    <td colspan="7">No Parts found starting with a "z"
+                    </td>
+                    </tr>
+            }
+            else
+            {
+            foreach (var item in Model)
             {
                 <tr>
                     <td>
@@ -72,7 +81,7 @@
                     </td>
                 </tr>
             }
-
+            }
         </table>
     </div>
 </article>

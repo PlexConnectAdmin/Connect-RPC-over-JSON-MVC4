@@ -44,7 +44,7 @@ namespace ConsumeWebAPI.Helper
 
       // resource uri
       string resourceUri = tokenEndpoint.plexResource.ToString();
-      AuthenticationResult ar;
+      AuthenticationResult authenticationResult;
 
       // OAuth2 token endpoint for 2-legged, server-to-server application authorization
       string authorityUri = _tokenEndpoint + "?grant_type=client_credentials";
@@ -55,14 +55,12 @@ namespace ConsumeWebAPI.Helper
       string clientSecret = SortedClientSecretList[0].clientSecret;
       ClientCredential clientCredential = new ClientCredential(clientId, clientSecret);
 
-      // 2. extract bearer token from JSON response
+      // 2. extract bearer token from AuthenticationResult
       try
       {
         // AAD includes an in memory cache, so this call may only receive a new token from the server if the cached token is expired.
-        ar = authContext.AcquireToken(resourceUri, clientCredential);
-
-        JObject payload = new JObject();
-        bearerToken = ar.AccessToken;
+        authenticationResult = authContext.AcquireToken(resourceUri, clientCredential);
+        bearerToken = authenticationResult.AccessToken;
       }
       catch (Exception e)
       {
@@ -71,25 +69,38 @@ namespace ConsumeWebAPI.Helper
       }
 
       // 3. use bearer token to get some parts by status, etc. By default, this limits to 10 results
-      var restClient = new RestClient(_tokenEndpoint);
-      var request = new RestRequest(Method.POST);
-      restClient = new RestClient("http://dev.api.plex.com/Engineering/PartList/Parts?partType=Other&PartStatus=Production");
-      request = new RestRequest(Method.GET);
+      //     At least of these controls must be specified: PartNo,Name,PartStatus,GroupKey,ProductTypeKey,CustomerNo,CustomerPart,DepartmentNo,PlannerKey,GradeKey,Master,ExclusiveUseRightsCustomerNo,PartDrawingNumber,PartProductGroupKey
+      // todo: put this filter in the UI, or a config setting or something
+      
+      // other sample call
+      // RestClient restClient = new RestClient("https://test.api.plex.com/Engineering/PartList/Parts?partType=Other&PartStatus=Production");
+      RestClient restClient = new RestClient("https://test.api.plex.com/Engineering/PartList/Parts?PartNo=z");
+      RestRequest request = new RestRequest(Method.GET);
       request.AddHeader("cache-control", "no-cache");
       request.AddHeader("authorization", "Bearer " + bearerToken);
       request.AddHeader("content-type", "multipart/form-data");
       IRestResponse response = restClient.Execute(request);
 
       JToken jsonVal = JToken.Parse(response.Content);
-      JObject joResponse = JObject.Parse(response.Content);
 
+      // todo: response has links "next" and "last" (previous) for paging: ...offset=380&limit=10... etc. Implement this paging.
+      
       JArray joResponses = ((dynamic)jsonVal).embedded;
 
-      List<PartModel> Users = joResponses.ToObject<List<PartModel>>();
+      List<PartModel> Parts = null;
+      if(joResponses ==null)
+      {
+      // todo: handle no parts returned
+      }
+      else
+      {
 
-      return Users;
+      Parts = joResponses.ToObject<List<PartModel>>();
+      }
 
-      // todo: try/catch for error handling
+      return Parts;
+
+      // todo: try/catch for error handling on all code
     }
 
     public PartModel GetById(int id)

@@ -358,7 +358,7 @@ namespace ConsumeWebAPI.Models
     [Display(Name = "Product_Type_Key")]
     public int? ProductTypeKey { get; set; }
     [Display(Name = "Program_Manager")]
-    public int? ProgramManager { get; set; }
+    public string ProgramManager { get; set; }
     [Display(Name = "Program_Manager_Name")]
     public string ProgramManagerName { get; set; }
     // [CustomerSetting("Part", "Quality Advanced Planning Version Display")]
