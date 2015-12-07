@@ -12,7 +12,7 @@ namespace ConsumeWebAPI.Controllers
 
         public ActionResult Index()
         {
-            return View(RestClient.GetSeveral());
+            return View(RestClient.GetSeveralParts());
         }
 
         //

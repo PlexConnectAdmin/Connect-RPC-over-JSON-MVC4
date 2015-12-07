@@ -9,6 +9,7 @@ using ConsumeWebAPI.Models;
 using RestSharp;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
 
 namespace ConsumeWebAPI.Helper
 {
@@ -23,11 +24,10 @@ namespace ConsumeWebAPI.Helper
       _client = new RestClient(_tokenEndpoint);
     }
 
-    public IEnumerable<PartModel> GetSeveral()
+    public IEnumerable<PartModel> GetSeveralParts()
     {
       // 0. Get settings from JSON config file
-      // below from http://stackoverflow.com/questions/10951599/getting-current-directory-in-net-web-application, better than System.Reflection.Assembly.GetExecutingAssembly().Location
-      // todo: optimize this with caching
+      JToken bearerToken;
       string exeRuntimeDirectory = System.IO.Path.GetDirectoryName(HttpRuntime.AppDomainAppPath);
       TokenEndpoint tokenEndpoint = JsonConvert.DeserializeObject<TokenEndpoint>(File.ReadAllText(exeRuntimeDirectory + @"\PlexConnectConfig.json"));
 
@@ -38,30 +38,50 @@ namespace ConsumeWebAPI.Helper
       List<ClientSecret> SortedClientSecretList = tokenEndpoint.clientSecrets.OrderByDescending(o => o.expiry).ToList();
 
       // 1. get the bearer token
-      var restClient = new RestClient(_tokenEndpoint);
-      var request = new RestRequest(Method.POST);
-      request.AddHeader("content-type", "application/x-www-form-urlencoded");
-      request.AddHeader("cache-control", "no-cache");
+
+      // Client app ID. 
       string clientId = _clientId;
+
+      // resource uri
+      string resourceUri = tokenEndpoint.plexResource.ToString();
+      AuthenticationResult ar;
+
+      // OAuth2 token endpoint for 2-legged, server-to-server application authorization
+      string authorityUri = _tokenEndpoint + "?grant_type=client_credentials";
+
+      // Create a new AuthenticationContext passing an Authority URI.
+      Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext authContext = new Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext(authorityUri);
+
       string clientSecret = SortedClientSecretList[0].clientSecret;
-      request.AddParameter("application/x-www-form-urlencoded", "grant_type=client_credentials&resource=" + tokenEndpoint.plexResource.ToString() + "&client_secret=" + System.Uri.EscapeDataString(clientSecret) + "&client_id=" + clientId, ParameterType.RequestBody);
-      IRestResponse response = restClient.Execute(request);
+      ClientCredential clientCredential = new ClientCredential(clientId, clientSecret);
 
       // 2. extract bearer token from JSON response
-      JObject joResponse = JObject.Parse(response.Content);
-      JToken jtBearerToken = joResponse["access_token"];
-      string bearerToken = jtBearerToken.ToString();
+      try
+      {
+        // AAD includes an in memory cache, so this call may only receive a new token from the server if the cached token is expired.
+        ar = authContext.AcquireToken(resourceUri, clientCredential);
+
+        JObject payload = new JObject();
+        bearerToken = ar.AccessToken;
+      }
+      catch (Exception e)
+      {
+        // handle any error
+        throw e;
+      }
 
       // 3. use bearer token to get some parts by status, etc. By default, this limits to 10 results
+      var restClient = new RestClient(_tokenEndpoint);
+      var request = new RestRequest(Method.POST);
       restClient = new RestClient("http://dev.api.plex.com/Engineering/PartList/Parts?partType=Other&PartStatus=Production");
       request = new RestRequest(Method.GET);
       request.AddHeader("cache-control", "no-cache");
       request.AddHeader("authorization", "Bearer " + bearerToken);
       request.AddHeader("content-type", "multipart/form-data");
-      response = restClient.Execute(request);
+      IRestResponse response = restClient.Execute(request);
 
       JToken jsonVal = JToken.Parse(response.Content);
-      joResponse = JObject.Parse(response.Content);
+      JObject joResponse = JObject.Parse(response.Content);
 
       JArray joResponses = ((dynamic)jsonVal).embedded;
 

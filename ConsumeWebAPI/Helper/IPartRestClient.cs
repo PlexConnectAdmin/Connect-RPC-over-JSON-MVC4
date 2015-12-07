@@ -7,7 +7,7 @@ namespace ConsumeWebAPI.Helper
     {
         void Add(PartModel partModel);
         void Delete(int id);
-        IEnumerable<PartModel> GetSeveral();
+        IEnumerable<PartModel> GetSeveralParts();
         PartModel GetById(int id);
         PartModel GetByIP(int ip);
         PartModel GetByType(int type);
