@@ -278,11 +278,6 @@ namespace ConsumeWebAPI.Models
     // [CustomerSetting("Part", "MRP Demand Level Use")]
     [Display(Name = "MRP_Demand_Level")]
     public bool? MRPDemandLevel { get; set; }
-    public bool MRPDemandLevelBool()
-    { 
-      bool mRPDemandLevel = MRPDemandLevel ?? false;
-      return mRPDemandLevel;
-    }
     [Display(Name = "Name")]
     public string Name { get; set; }
     [Display(Name = "Note")]

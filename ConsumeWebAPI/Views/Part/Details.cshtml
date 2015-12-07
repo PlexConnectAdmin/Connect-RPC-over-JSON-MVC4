@@ -11,7 +11,8 @@
         Proposed deletion
     </p>
 
-    <fieldset>
+    <fieldset>    
+        <legend>Part</legend>
         <div class="label">
             @Html.DisplayNameFor(model => model.PartKey)
         </div>
@@ -54,13 +55,7 @@
             @Html.DisplayFor(model => model.UpdatedDate)
         </div>
 
-        <div class="display-field">
-            @Html.DisplayNameFor(model => model.MRPDemandLevel)
-        </div>
-        <div class="label">
-            @string.Format(Model.MRPDemandLevelBool() ? "Yes" : "No")
-        </div>
-        <div class="label">
+         <div class="label">
             @Html.DisplayNameFor(model => model.CreatedDate)
         </div>
         <div class="display-field">

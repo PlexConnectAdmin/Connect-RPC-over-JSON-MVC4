@@ -7,4 +7,18 @@
 <hgroup class="title">
     <h1 class="error">Error.</h1>
     <h2 class="error">An error occurred while processing your request.</h2>
+    <h3 class="error">Exception Details: 
+            @Html.DisplayFor(model => model.Exception.Message)
+    </h3>
 </hgroup>
+
+@if (Model != null)
+{
+    <p>Controller Name: @Model.ControllerName</p> 
+    <p>Action Name : @Model.ActionName</p> 
+    <p> 
+        <p>Source:@Model.Exception.Source</p> 
+        <p>Stack Trace:@Model.Exception.StackTrace</p> 
+        <p>InnerException:@Model.Exception.InnerException</p>
+    </p>
+}

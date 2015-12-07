@@ -14,13 +14,13 @@ namespace ConsumeWebAPI.Helper
   {
 
     public PartRestClient()
-    {      
+    {
     }
 
     public IEnumerable<PartModel> GetSeveralParts()
     {
-    Rpc rpc = new Rpc();
-    Uri resource = new Uri("https://test.api.plex.com/Engineering/PartList/Parts?PartNo=z");
+      Rpc rpc = new Rpc();
+      Uri resource = new Uri("https://test.api.plex.com/Engineering/PartList/Parts?PartNo=z");
       JToken jsonVal = rpc.Execute(Method.GET, resource);
 
       // todo: response has links "next" and "last" (previous) for paging: ...offset=380&limit=10... etc. Implement this paging.
@@ -78,7 +78,7 @@ namespace ConsumeWebAPI.Helper
 
     public PartModel GetByIP(int ip)
     {
-    return null;
+      return null;
       //var request = new RestRequest("api/part/ip/{ip}", Method.GET) { RequestFormat = DataFormat.Json };
       //request.AddParameter("ip", ip, ParameterType.UrlSegment);
 
@@ -117,9 +117,19 @@ namespace ConsumeWebAPI.Helper
       Uri resource = new Uri("https://test.api.plex.com/Engineering/PartList/Parts/" + id.ToString());
       JToken jsonVal = rpc.Execute(Method.DELETE, resource);
 
-      if (rpc.Response.StatusCode == HttpStatusCode.NotFound)
+
+      if (rpc.Response.StatusCode != HttpStatusCode.OK)
       {
-        throw new Exception(rpc.Response.ErrorMessage);
+        string message = rpc.Response.StatusCode + ": " + ((dynamic)jsonVal).detail;
+
+        if (rpc.Response.ErrorMessage != null)
+        {
+          message += rpc.Response.ErrorMessage;
+        }
+
+        System.Exception exception = new Exception(message);
+        throw exception;
+        //return false;
       }
     }
   }
