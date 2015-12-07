@@ -64,42 +64,28 @@ namespace ConsumeWebAPI.Helper
       return Part;
     }
 
-    public PartModel GetByType(int type)
+    public void Add(PartAddModel part)
     {
-      return null;
-      //var request = new RestRequest("api/part/type/{datatype}", Method.GET)
-      //{
-      //  RequestFormat = DataFormat.Json
-      //};
+      Rpc rpc = new Rpc();
+      Uri resource = new Uri("https://test.api.plex.com/Engineering/PartList/Parts");
 
-      //request.AddParameter("datatype", type, ParameterType.UrlSegment);
+      string json = JsonConvert.SerializeObject(part);
 
-      //var response = _client.Execute<PartModel>(request);
+      JToken jsonVal = rpc.Execute(Method.POST, resource, json);
 
-      //return response.Data;
-    }
+      // TODO: GENERalize this code into a private method
+      if (rpc.Response.StatusCode != HttpStatusCode.OK)
+      {
+        string message = rpc.Response.StatusCode + ": " + ((dynamic)jsonVal).detail;
 
-    public PartModel GetByIP(int ip)
-    {
-      return null;
-      //var request = new RestRequest("api/part/ip/{ip}", Method.GET) { RequestFormat = DataFormat.Json };
-      //request.AddParameter("ip", ip, ParameterType.UrlSegment);
+        if (rpc.Response.ErrorMessage != null)
+        {
+          message += rpc.Response.ErrorMessage;
+        }
 
-      //var response = _client.Execute<PartModel>(request);
-
-      //return response.Data;
-    }
-
-    public void Add(PartModel part)
-    {
-      //var request = new RestRequest("api/part", Method.POST) { RequestFormat = DataFormat.Json };
-      //request.AddBody(part);
-
-      //var response = _client.Execute<PartModel>(request);
-
-      //if (response.StatusCode != HttpStatusCode.Created)
-      //  throw new Exception(response.ErrorMessage);
-
+        System.Exception exception = new Exception(message);
+        throw exception;
+      }
     }
 
     public void Copy(PartCopyModel partCopyModel, int partKey)

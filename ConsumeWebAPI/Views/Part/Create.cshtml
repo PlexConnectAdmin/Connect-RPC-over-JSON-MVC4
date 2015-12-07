@@ -1,4 +1,4 @@
-﻿@model ConsumeWebAPI.Models.PartModel
+﻿@model ConsumeWebAPI.Models.PartAddModel
 
 @{
     ViewBag.Title = "Create";
@@ -9,7 +9,7 @@
 
 <article>
     <p>
-        Here you can manipulat server data.
+        Fill out the form completely to add the part.
     </p>
 
 
@@ -20,62 +20,26 @@
 
         <fieldset>
             <legend>partModel</legend>
+        <div class="label">
+            @Html.DisplayNameFor(model => model.PartNo)
+        </div>
+        <div class="display-field">
+            @Html.EditorFor(model => model.PartNo)
+        </div>
 
-            <div class="label">
-                @Html.LabelFor(model => model.InitialDate)
-            </div>
-            <div class="label">
-                @Html.EditorFor(model => model.InitialDate)
-                @Html.ValidationMessageFor(model => model.InitialDate)
-            </div>
+        <div class="label">
+            @Html.DisplayNameFor(model => model.Revision)
+        </div>
+        <div class="display-field">
+            @Html.EditorFor(model => model.Revision)
+        </div>
 
-            <div class="label">
-                @Html.LabelFor(model => model.EndDate)
-            </div>
-            <div class="label">
-                @Html.EditorFor(model => model.EndDate)
-                @Html.ValidationMessageFor(model => model.EndDate)
-            </div>
-
-            <div class="label">
-                @Html.LabelFor(model => model.OrderNumber)
-            </div>
-            <div class="editor-field">
-                @Html.EditorFor(model => model.OrderNumber)
-                @Html.ValidationMessageFor(model => model.OrderNumber)
-            </div>
-
-            <div class="label">
-                @Html.LabelFor(model => model.IsDirty)
-            </div>
-            <div class="editor-field">
-                @Html.EditorFor(model => model.IsDirty)
-                @Html.ValidationMessageFor(model => model.IsDirty)
-            </div>
-
-            <div class="label">
-                @Html.LabelFor(model => model.IP)
-            </div>
-            <div class="editor-field">
-                @Html.EditorFor(model => model.IP)
-                @Html.ValidationMessageFor(model => model.IP)
-            </div>
-
-            <div class="label">
-                @Html.LabelFor(model => model.Type)
-            </div>
-            <div class="editor-field">
-                @Html.EditorFor(model => model.Type)
-                @Html.ValidationMessageFor(model => model.Type)
-            </div>
-
-            <div class="label">
-                @Html.LabelFor(model => model.RecordIdentifier)
-            </div>
-            <div class="editor-field">
-                @Html.EditorFor(model => model.RecordIdentifier)
-                @Html.ValidationMessageFor(model => model.RecordIdentifier)
-            </div>
+        <div class="label">
+            @Html.DisplayNameFor(model => model.Description)
+        </div>
+        <div class="label">
+            @Html.EditorFor(model => model.Description)
+        </div>
 
             <p>
                 <input type="submit" value="Create" />  @Html.ActionLink("Cancel", "Index", null, new { @class = "actionlinkbutton" })
