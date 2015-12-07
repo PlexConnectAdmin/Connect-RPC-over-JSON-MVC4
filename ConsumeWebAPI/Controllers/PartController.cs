@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using ConsumeWebAPI.Helper;
 using ConsumeWebAPI.Models;
+using Newtonsoft.Json;
 
 namespace ConsumeWebAPI.Controllers
 {
@@ -61,7 +62,7 @@ namespace ConsumeWebAPI.Controllers
     //
     // GET: /part/Edit/5
 
-    public ActionResult Edit(int id)
+    public ActionResult Copy(int id)
     {
       return View(RestClient.GetById(id));
     }
@@ -70,18 +71,15 @@ namespace ConsumeWebAPI.Controllers
     // POST: /part/Edit/5
 
     [HttpPost]
-    public ActionResult Edit(PartModel part)
+    public ActionResult Copy(PartModel part)
     {
-      try
-      {
-        RestClient.Update(part);
+        PartCopyModel partCopyModel = new PartCopyModel();
+        partCopyModel.NewPartNo = part.PartNo;
+        partCopyModel.NewRevision = part.Revision;
+
+        RestClient.Copy(partCopyModel, part.PartKey);
 
         return RedirectToAction("Index");
-      }
-      catch
-      {
-        return View();
-      }
     }
 
     //

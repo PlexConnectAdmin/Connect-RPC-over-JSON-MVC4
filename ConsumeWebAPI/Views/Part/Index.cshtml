@@ -74,7 +74,7 @@
             @Html.DisplayFor(modelItem => item.PartType)
           </td>
           <td>
-            @Html.ActionLink("Edit", "Edit", new { id = item.PartKey }) |
+            @Html.ActionLink("Copy", "copy", new { id = item.PartKey }) |
                         @Html.ActionLink("Details", "Details", new { id = item.PartKey }) |
                         @Html.ActionLink("Delete", "Delete", new { id = item.PartKey })
           </td>

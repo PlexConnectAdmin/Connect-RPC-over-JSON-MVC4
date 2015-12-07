@@ -1,15 +1,21 @@
 ﻿@model ConsumeWebAPI.Models.PartModel
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Copy";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Consume Asp.net WebAPI :: Details</h2>
+<h2>Consume Asp.net WebAPI :: Copy</h2>
 <article>
-   <p>
-        Proposed deletion
+    <p>
+        Do you want to copy this part?
     </p>
+
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
 
     <fieldset>    
         <legend>Part</legend>
@@ -18,20 +24,21 @@
         </div>
         <div class="display-field">
             @Html.DisplayFor(model => model.PartKey)
-        </div>
-
-        <div class="label">
-            @Html.DisplayNameFor(model => model.Revision)
-        </div>
-        <div class="display-field">
-            @Html.DisplayFor(model => model.Revision)
+            @Html.HiddenFor(model => model.PartKey)
         </div>
 
         <div class="label">
             @Html.DisplayNameFor(model => model.PartNo)
         </div>
         <div class="display-field">
-            @Html.DisplayFor(model => model.PartNo)
+            @Html.EditorFor(model => model.PartNo)
+        </div>
+
+        <div class="label">
+            @Html.DisplayNameFor(model => model.Revision)
+        </div>
+        <div class="display-field">
+            @Html.EditorFor(model => model.Revision)
         </div>
 
         <div class="label">
@@ -61,10 +68,14 @@
         <div class="display-field">
             @Html.DisplayFor(model => model.CreatedDate)
         </div>
-    </fieldset>
-    <p>
-        @Html.ActionLink("Copy", "Copy", new { id = Model.PartKey }, new { @class = "actionlinkbutton" }) @Html.ActionLink("Cancel", "Index", null, new { @class = "actionlinkbutton" })
-    </p>
+
+            <p>
+                <input type="submit" value="Copy" /> @Html.ActionLink("Cancel", "Index", null, new { @class = "actionlinkbutton" })
+            </p>
+        </fieldset>
+    }
+
+
 </article>
 
 <aside>
@@ -79,3 +90,7 @@
         <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
     </ul>
 </aside>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

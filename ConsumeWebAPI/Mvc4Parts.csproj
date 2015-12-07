@@ -177,6 +177,7 @@
     <Compile Include="Helper\PartRestClient.cs" />
     <Compile Include="Helper\Rpc.cs" />
     <Compile Include="Helper\TokenEndpoint.cs" />
+    <Compile Include="Models\PartCopyModel.cs" />
     <Compile Include="Models\PartModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -274,7 +275,7 @@
     <Content Include="Views\Part\Index.cshtml" />
     <Content Include="Views\Part\Details.cshtml" />
     <Content Include="Views\Part\Create.cshtml" />
-    <Content Include="Views\Part\Edit.cshtml" />
+    <Content Include="Views\Part\Copy.cshtml" />
     <Content Include="Views\Part\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>

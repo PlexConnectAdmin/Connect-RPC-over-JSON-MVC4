@@ -23,7 +23,13 @@ namespace ConsumeWebAPI.Helper
       set { _response = value; }
     }
 
-    public JToken Execute(RestSharp.Method method, Uri RpcUri)
+    public JToken Execute(RestSharp.Method method, Uri rpcUri)
+    {
+      JToken jToken = Execute(method, rpcUri, null);
+    return jToken;
+    }
+
+    public JToken Execute(RestSharp.Method method, Uri rpcUri, object body)
     {
       // 0. Get settings from JSON config file
       JToken bearerToken;
@@ -69,11 +75,23 @@ namespace ConsumeWebAPI.Helper
       }
 
       // 3. use bearer token to get some result(s)
-      RestClient restClient = new RestClient(RpcUri);
+      RestClient restClient = new RestClient(rpcUri);
       RestRequest request = new RestRequest(method);
+
+      if (body != null)
+      {
+        request.AddParameter("application/json", body, ParameterType.RequestBody);
+
+      //request.AddJsonBody(body);
+        request.AddHeader("content-type", "application/json");
+      }
+      else
+      {
+            request.AddHeader("content-type", "multipart/form-data");
+}
+
       request.AddHeader("cache-control", "no-cache");
       request.AddHeader("authorization", "Bearer " + bearerToken);
-      request.AddHeader("content-type", "multipart/form-data");
       _response = restClient.Execute(request);
 
       JToken jsonVal = JToken.Parse(_response.Content);

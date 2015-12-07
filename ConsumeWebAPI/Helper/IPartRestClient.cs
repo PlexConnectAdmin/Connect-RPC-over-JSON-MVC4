@@ -12,6 +12,6 @@ namespace ConsumeWebAPI.Helper
         PartModel GetById(int id);
         PartModel GetByIP(int ip);
         PartModel GetByType(int type);
-        void Update(PartModel partModel);
+        void Copy(PartCopyModel part, int partKey);
     }
 }

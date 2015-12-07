@@ -6,6 +6,7 @@ using System.Web;
 using System.Linq;
 using ConsumeWebAPI.Models;
 using RestSharp;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace ConsumeWebAPI.Helper
@@ -99,16 +100,100 @@ namespace ConsumeWebAPI.Helper
 
     }
 
-    public void Update(PartModel part)
+    public void Copy(PartCopyModel partCopyModel, int partKey)
     {
-      //var request = new RestRequest("api/part/{id}", Method.PUT) { RequestFormat = DataFormat.Json };
-      //request.AddParameter("id", part.PartKey, ParameterType.UrlSegment);
-      //request.AddBody(part);
+      Rpc rpc = new Rpc();
+      Uri resource = new Uri("https://test.api.plex.com/Engineering/PartList/Parts/" + partKey.ToString() + "/PartCopy");
 
-      //var response = _client.Execute<PartModel>(request);
+      string json = JsonConvert.SerializeObject(partCopyModel);
 
-      //if (response.StatusCode == HttpStatusCode.NotFound)
-      //  throw new Exception(response.ErrorMessage);
+      JToken jsonVal = rpc.Execute(Method.POST, resource, json);
+
+      if (rpc.Response.StatusCode != HttpStatusCode.OK)
+      {
+        string message = rpc.Response.StatusCode + ": " + ((dynamic)jsonVal).detail;
+
+        if (rpc.Response.ErrorMessage != null)
+        {
+          message += rpc.Response.ErrorMessage;
+        }
+
+        System.Exception exception = new Exception(message);
+        throw exception;
+      }
+
+      // JObject joResponse = JObject.Parse(response.Content);
+
+      JValue status = (JValue)jsonVal["status"];
+      if (status == null)
+      {
+        JObject joResult = (JObject)jsonVal["result"];
+        JObject data = (JObject)joResult["data"];
+
+        JToken errorMessage = data["errorMessage"];
+        if (errorMessage.HasValues)
+        {
+          System.Exception exception = new Exception(errorMessage.ToString());
+          throw exception;
+        }
+        else
+        {
+          JValue success = (JValue)data["success"];
+          if ((bool)success)
+          {
+            // todo: get new part key here and navigate to its detail form w/success message
+
+            // Example of success response
+            //                {
+            //  "result": {
+            //    "data": {
+            //      "errorMessage": null,
+            //      "success": true,
+            //      "partKey": 2260280,
+            //      "partNo": "o0ionnoicn24n9o"
+            //    },
+            //    "validationResult": null,
+            //    "revisionTrackingContext": null
+            //  }
+            //}
+          }
+          else
+          {
+            System.Exception exception = new Exception(jsonVal.ToString());
+            throw exception;
+
+            // Example of unsuccessful response
+            //                {
+            //  "result": {
+            //    "data": {
+            //      "errorMessage": "The Part No and Revision you specified already exists",
+            //      "success": false,
+            //      "partKey": 0,
+            //      "partNo": null
+            //    },
+            //    "validationResult": null,
+            //    "revisionTrackingContext": null
+            //  }
+            //}
+          }
+        }
+      }
+      else
+      {
+        System.Exception exception = new Exception(status.ToString() + jsonVal.ToString());
+        throw exception;
+      }
+
+
+      // todo: clean up the code above, possible using dynamic: 
+      //((dynamic)jsonVal).detail
+
+      //string jsonErrMsg (dynamic)jsonVal.result.data.errorMessage;
+      //if  != null)
+      //{
+      //  System.Exception exception = new Exception((((dynamic)jsonVal).result.data.errorMessage));
+      //  throw exception;
+      //}
     }
 
     public void Delete(int id)
@@ -129,7 +214,6 @@ namespace ConsumeWebAPI.Helper
 
         System.Exception exception = new Exception(message);
         throw exception;
-        //return false;
       }
     }
   }
