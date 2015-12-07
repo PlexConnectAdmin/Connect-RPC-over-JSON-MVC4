@@ -48,17 +48,10 @@ namespace ConsumeWebAPI.Controllers
     [HttpPost]
     public ActionResult Create(PartAddModel part)
     {
-      try
-      {
-        RestClient.Add(part);
+      RestClient.Add(part);
 
-        // todo: retrieve new key and return to its detail form
-        return RedirectToAction("Index");
-      }
-      catch
-      {
-        return View();
-      }
+      // todo: retrieve new key and return to its detail form
+      return RedirectToAction("Index");
     }
 
     //

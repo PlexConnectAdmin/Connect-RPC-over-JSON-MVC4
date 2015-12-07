@@ -26,7 +26,7 @@ namespace ConsumeWebAPI.Helper
     public JToken Execute(RestSharp.Method method, Uri rpcUri)
     {
       JToken jToken = Execute(method, rpcUri, null);
-    return jToken;
+      return jToken;
     }
 
     public JToken Execute(RestSharp.Method method, Uri rpcUri, object body)
@@ -82,19 +82,33 @@ namespace ConsumeWebAPI.Helper
       {
         request.AddParameter("application/json", body, ParameterType.RequestBody);
 
-      //request.AddJsonBody(body);
+        //request.AddJsonBody(body);
         request.AddHeader("content-type", "application/json");
       }
       else
       {
-            request.AddHeader("content-type", "multipart/form-data");
-}
+        request.AddHeader("content-type", "multipart/form-data");
+      }
 
       request.AddHeader("cache-control", "no-cache");
       request.AddHeader("authorization", "Bearer " + bearerToken);
       _response = restClient.Execute(request);
 
-      JToken jsonVal = JToken.Parse(_response.Content);
+
+      JToken jsonVal;
+      if (string.IsNullOrEmpty(_response.Content))
+      {
+        ConsumeWebAPI.Models.HttpResponse httpResponse = new Models.HttpResponse();
+        httpResponse.Message = _response.StatusDescription;
+        httpResponse.StatusCode = _response.StatusCode.ToString();
+        string json = JsonConvert.SerializeObject(httpResponse);
+        jsonVal = JToken.Parse(json);
+      }
+      else
+      {
+        jsonVal = JToken.Parse(_response.Content);
+      }
+
       return jsonVal;
     }
   }

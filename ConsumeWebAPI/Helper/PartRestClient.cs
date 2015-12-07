@@ -73,9 +73,18 @@ namespace ConsumeWebAPI.Helper
 
       JToken jsonVal = rpc.Execute(Method.POST, resource, json);
 
+      if ((rpc.Response.StatusDescription == "Missing Identity Response Field.") && (rpc.Response.StatusCode == HttpStatusCode.BadRequest))
+      {
+        // Creating parts is basically inop, but can be used, with caution
+        // Yubo Dong: "The CreatePart failure is expected. The framework now looking for a resource identifier when creating new resource. The CreatePart action class in F5 currently doesn’t meet this requirement. Please disable the test for CreatePart for now."
+        // This line will allow us it ignore the response error, since the part is actually created
+        return;
+      }
+
       // TODO: GENERalize this code into a private method
       if (rpc.Response.StatusCode != HttpStatusCode.OK)
       {
+
         string message = rpc.Response.StatusCode + ": " + ((dynamic)jsonVal).detail;
 
         if (rpc.Response.ErrorMessage != null)
