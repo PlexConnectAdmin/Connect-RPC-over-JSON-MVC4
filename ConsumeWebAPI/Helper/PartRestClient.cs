@@ -21,7 +21,9 @@ namespace ConsumeWebAPI.Helper
     public IEnumerable<PartModel> GetSeveralParts()
     {
       Rpc rpc = new Rpc();
-      Uri resource = new Uri("https://test.api.plex.com/Engineering/PartList/Parts?PartNo=z");
+
+      // default limit is 10, here we set it to 50 by way of example
+      Uri resource = new Uri("https://test.api.plex.com/Engineering/PartList/Parts?PartNo=z&limit=50");
       JToken jsonVal = rpc.Execute(Method.GET, resource);
 
       // todo: response has links "next" and "last" (previous) for paging: ...offset=380&limit=10... etc. Implement this paging.

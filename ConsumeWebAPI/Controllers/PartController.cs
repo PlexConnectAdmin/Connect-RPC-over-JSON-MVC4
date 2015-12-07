@@ -73,13 +73,37 @@ namespace ConsumeWebAPI.Controllers
     [HttpPost]
     public ActionResult Copy(PartModel part)
     {
-        PartCopyModel partCopyModel = new PartCopyModel();
-        partCopyModel.NewPartNo = part.PartNo;
-        partCopyModel.NewRevision = part.Revision;
+      PartCopyModel partCopyModel = new PartCopyModel();
+      partCopyModel.NewPartNo = part.PartNo;
+      partCopyModel.NewRevision = part.Revision;
 
-        RestClient.Copy(partCopyModel, part.PartKey);
+      // some of the properties that could be exposed.
+      partCopyModel.Copy = false;
+      partCopyModel.CopyAttachments = false;
+      partCopyModel.CopyBOM = false;
+      partCopyModel.CopyCommissionSetup = false;
+      partCopyModel.CopyCustomerPartNumbers = false;
+      partCopyModel.CopyHeatTreatParameters = false;
+      partCopyModel.CopyNew = false;
+      partCopyModel.CopyPartDetails = false;
+      partCopyModel.CopyPartMaterialsMultiples = false;
+      partCopyModel.CopyPPAP = false;
+      partCopyModel.CopyProcessRouting = false;
+      partCopyModel.CopyQualityDocuments = false;
+      partCopyModel.CopySpecifications = false;
+      partCopyModel.CopyTestSetup = false;
+      partCopyModel.CopyToExisting = false;
+      partCopyModel.CopyToolingPlan = false;
+      partCopyModel.SkipApprovedWorkCentersSuppliers = true;
+      partCopyModel.SkipBulletins = true;
+      partCopyModel.SkipCosts = true;
+      partCopyModel.SkipOperationDescription = true;
+      partCopyModel.SkipPieceWeight = true;
+      partCopyModel.SkipSchedulingParams = true;
 
-        return RedirectToAction("Index");
+      RestClient.Copy(partCopyModel, part.PartKey);
+
+      return RedirectToAction("Index");
     }
 
     //
