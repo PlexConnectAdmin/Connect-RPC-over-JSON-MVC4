@@ -7,44 +7,68 @@
 
 <h2>Consume Asp.net WebAPI :: Details</h2>
 <article>
-    <p>
-        Here you can manipulat server data.
+   <p>
+        Proposed deletion
     </p>
 
     <fieldset>
         <div class="label">
-            @Html.DisplayNameFor(model => model.Id)
-        </div>
-        <div class="label">
-            @Html.DisplayNameFor(model => model.InitialDate)
+            @Html.DisplayNameFor(model => model.PartKey)
         </div>
         <div class="display-field">
-            @Html.DisplayFor(model => model.InitialDate)
+            @Html.DisplayFor(model => model.PartKey)
         </div>
+
         <div class="label">
-            @Html.DisplayNameFor(model => model.EndDate)
-        </div>
-        <div class="label">
-            @Html.DisplayNameFor(model => model.EndDate)
+            @Html.DisplayNameFor(model => model.Revision)
         </div>
         <div class="display-field">
-            @Html.DisplayFor(model => model.OrderNumber)
+            @Html.DisplayFor(model => model.Revision)
+        </div>
+
+        <div class="label">
+            @Html.DisplayNameFor(model => model.PartNo)
         </div>
         <div class="display-field">
-            @Html.DisplayNameFor(model => model.IsDirty)
+            @Html.DisplayFor(model => model.PartNo)
+        </div>
+
+        <div class="label">
+            @Html.DisplayNameFor(model => model.Note)
         </div>
         <div class="label">
-            @string.Format(Model.IsDirty ? "Yes" : "No")
+            @Html.DisplayNameFor(model => model.Note)
         </div>
+
         <div class="label">
-            @Html.DisplayNameFor(model => model.IP)
+            @Html.DisplayNameFor(model => model.UpdateBy)
         </div>
         <div class="display-field">
-            @Html.DisplayFor(model => model.IP)
+            @Html.DisplayFor(model => model.UpdateBy)
+        </div>
+
+        <div class="label">
+            @Html.DisplayNameFor(model => model.UpdatedDate)
+        </div>
+        <div class="display-field">
+            @Html.DisplayFor(model => model.UpdatedDate)
+        </div>
+
+        <div class="display-field">
+            @Html.DisplayNameFor(model => model.MRPDemandLevel)
+        </div>
+        <div class="label">
+            @string.Format(Model.MRPDemandLevelBool() ? "Yes" : "No")
+        </div>
+        <div class="label">
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </div>
+        <div class="display-field">
+            @Html.DisplayFor(model => model.CreatedDate)
         </div>
     </fieldset>
     <p>
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "actionlinkbutton" }) @Html.ActionLink("Cancel", "Index", null, new { @class = "actionlinkbutton" })
+        @Html.ActionLink("Edit", "Edit", new { id = Model.PartKey }, new { @class = "actionlinkbutton" }) @Html.ActionLink("Cancel", "Index", null, new { @class = "actionlinkbutton" })
     </p>
 </article>
 

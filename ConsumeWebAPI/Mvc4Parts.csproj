@@ -175,6 +175,7 @@
     <Compile Include="Helper\ClientSecret.cs" />
     <Compile Include="Helper\IPartRestClient.cs" />
     <Compile Include="Helper\PartRestClient.cs" />
+    <Compile Include="Helper\Rpc.cs" />
     <Compile Include="Helper\TokenEndpoint.cs" />
     <Compile Include="Models\PartModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

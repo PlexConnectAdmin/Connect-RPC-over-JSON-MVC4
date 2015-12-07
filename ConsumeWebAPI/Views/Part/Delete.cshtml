@@ -8,60 +8,61 @@
 <h2>Consume Asp.net WebAPI :: Delete</h2>
 
 <article>
-    <p>
-        Here you can manipulat server data.
-    </p>
     <h3>Are you sure you want to delete this?</h3>
     <fieldset>
-        <legend>partModel</legend>
-
         <div class="label">
-            @Html.DisplayNameFor(model => model.InitialDate)
+            @Html.DisplayNameFor(model => model.PartKey)
         </div>
         <div class="display-field">
-            @Html.DisplayFor(model => model.InitialDate)
-        </div>
-
-        <div class="label">
-            @Html.DisplayNameFor(model => model.EndDate)
-        </div>
-        <div class="display-field">
-            @Html.DisplayFor(model => model.EndDate)
+            @Html.DisplayFor(model => model.PartKey)
         </div>
 
         <div class="label">
-            @Html.DisplayNameFor(model => model.OrderNumber)
+            @Html.DisplayNameFor(model => model.Revision)
         </div>
         <div class="display-field">
-            @Html.DisplayFor(model => model.OrderNumber)
+            @Html.DisplayFor(model => model.Revision)
         </div>
 
         <div class="label">
-            @Html.DisplayNameFor(model => model.IsDirty)
+            @Html.DisplayNameFor(model => model.PartNo)
         </div>
         <div class="display-field">
-            @string.Format(Model.IsDirty ? "Yes" : "No")
+            @Html.DisplayFor(model => model.PartNo)
         </div>
 
         <div class="label">
-            @Html.DisplayNameFor(model => model.IP)
+            @Html.DisplayNameFor(model => model.Note)
         </div>
         <div class="display-field">
-            @Html.DisplayFor(model => model.IP)
+            @Html.DisplayNameFor(model => model.Note)
         </div>
 
         <div class="label">
-            @Html.DisplayNameFor(model => model.Type)
+            @Html.DisplayNameFor(model => model.UpdateBy)
         </div>
         <div class="display-field">
-            @Html.DisplayFor(model => model.Type)
+            @Html.DisplayFor(model => model.UpdateBy)
         </div>
 
         <div class="label">
-            @Html.DisplayNameFor(model => model.RecordIdentifier)
+            @Html.DisplayNameFor(model => model.UpdatedDate)
         </div>
         <div class="display-field">
-            @Html.DisplayFor(model => model.RecordIdentifier)
+            @Html.DisplayFor(model => model.UpdatedDate)
+        </div>
+
+        <div class="label">
+            @Html.DisplayNameFor(model => model.MRPDemandLevel)
+        </div>
+        <div class="display-field">
+            @string.Format(Model.MRPDemandLevelBool() ? "Yes" : "No")
+        </div>
+        <div class="label">
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </div>
+        <div class="display-field">
+            @Html.DisplayFor(model => model.CreatedDate)
         </div>
     </fieldset>
     @using (Html.BeginForm())
