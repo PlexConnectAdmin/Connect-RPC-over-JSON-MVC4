@@ -5,5 +5,5 @@ This example is expected to run from a private client such as a web server acces
 
 To get this example operational:
 
-1. Make sure, possibly by using Postman or some other REST Client, that the resource in ConsumeWebAPI.Helper.GetSeveralParts woudl resturn some usable parts for your tenant.
+1. Make sure, possibly by using Postman or some other REST Client, that the resource in ConsumeWebAPI.Helper.GetSeveralParts will return some usable parts for your tenant.
 2. Copy PlexConnectConfig.json.sample as PlexConnectConfig.json and fill it in with the relevant details obtained from Plex for your application. Review the ConsumeWebAPI.Helper.Execute method and make sure your config file or its contents is accessed from a secure location.
