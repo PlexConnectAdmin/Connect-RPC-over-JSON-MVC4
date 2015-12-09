@@ -34,7 +34,10 @@ namespace ConsumeWebAPI.Helper
       // 0. Get settings from JSON config file
       JToken bearerToken;
       string exeRuntimeDirectory = System.IO.Path.GetDirectoryName(HttpRuntime.AppDomainAppPath);
-      TokenEndpoint tokenEndpoint = JsonConvert.DeserializeObject<TokenEndpoint>(File.ReadAllText(exeRuntimeDirectory + @"\PlexConnectConfig.json"));
+
+      // Looking up the token endpoint and app registration content in App_Data, which is by default not viewable by browsing the web site, see http://stackoverflow.com/questions/528858/what-is-the-app-data-folder-used-for-in-visual-studio
+      // Regardless of the location you use, make sure it is similarly secure.
+      TokenEndpoint tokenEndpoint = JsonConvert.DeserializeObject<TokenEndpoint>(File.ReadAllText(exeRuntimeDirectory + @"\App_Data\PlexConnectConfig.json"));
 
       _tokenEndpoint = tokenEndpoint.tokenEndPoint;
       RestClient _client = new RestClient(_tokenEndpoint);

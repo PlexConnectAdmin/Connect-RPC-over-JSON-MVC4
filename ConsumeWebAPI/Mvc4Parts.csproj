@@ -220,7 +220,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="LICENSE" />
-    <Content Include="PlexConnectConfig.json" />
+    <Content Include="App_Data\PlexConnectConfig.json" />
     <Content Include="PlexConnectConfig.json.sample" />
     <None Include="Properties\PublishProfiles\consumewebapi.pubxml" />
     <Content Include="README.md" />
@@ -281,7 +281,6 @@
     <Content Include="Views\Part\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Filters\" />
   </ItemGroup>
   <ItemGroup>
