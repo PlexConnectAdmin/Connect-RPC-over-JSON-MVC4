@@ -1,15 +1,15 @@
 ﻿{  
-   "clientId":"YOUR-APPLICATION-ID-FROM-PLEX",
-   "clientSecrets":[  
+   "clientId": "YOUR-APPLICATION-ID-FROM-PLEX",
+   "clientSecrets": [  
       {  
-         "clientSecret":"ONE-SECRET-FROM-PLEX-THAT-YOU-TREAT-AS-A-PASSWORD",
-         "expiry":"YYYY-MM-DDT00:00:00Z"
+         "clientSecret": "ONE-SECRET-FROM-PLEX-THAT-YOU-TREAT-AS-A-PASSWORD",
+         "expiry": "YYYY-MM-DDT00:00:00Z"
       },
        {  
-         "clientSecret":"AT-LEAST-ONE-OTHER-SECRET-FROM-PLEX-THAT-YOU-TREAT-AS-A-PASSWORD",
-         "expiry":"YYYY-MM-DDT00:00:00Z"
+         "clientSecret": "AT-LEAST-ONE-OTHER-SECRET-FROM-PLEX-THAT-YOU-TREAT-AS-A-PASSWORD",
+         "expiry": "YYYY-MM-DDT00:00:00Z"
       }
    ],
-   "plexResource":"URI-OF-PLEX-RESOURCE",
-   "tokenEndPoint":"URI-OF-PLEX-TOKEN-ENDPOINT"
+   "plexResource": "URI-OF-PLEX-RESOURCE",
+   "tokenEndPoint": "URI-OF-PLEX-TOKEN-ENDPOINT"
 }
