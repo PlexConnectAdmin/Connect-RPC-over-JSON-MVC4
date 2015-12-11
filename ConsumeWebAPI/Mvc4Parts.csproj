@@ -220,10 +220,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="LICENSE" />
-    <Content Include="U:\Apps\API Management\PlexConnectConfig.json">
-      <Link>App_Data\PlexConnectConfig.json</Link>
-    </Content>
-    <Content Include="PlexConnectConfig.json.sample" />
+    <Content Include="App_Data\PlexConnectConfig.json" />
     <None Include="Properties\PublishProfiles\consumewebapi.pubxml" />
     <Content Include="README.md" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
@@ -281,6 +278,9 @@
     <Content Include="Views\Part\Create.cshtml" />
     <Content Include="Views\Part\Copy.cshtml" />
     <Content Include="Views\Part\Delete.cshtml" />
+    <Content Include="U:\Apps\API Management\PlexConnectConfig.json.sample">
+      <Link>App_Data\PlexConnectConfig.json.sample</Link>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Filters\" />
