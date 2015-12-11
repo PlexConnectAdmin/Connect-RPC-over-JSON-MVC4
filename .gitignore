@@ -10,9 +10,6 @@
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
-# Config files with secrets, etc.
-ConsumeWebAPI/App_Data/PlexConnectConfig.json
-
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
@@ -232,5 +229,6 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
-/ConsumeWebAPI/PlexConnectConfig.json
-/ConsumeWebAPI/PlexConnectConfig.json
+
+# Config files with secrets, etc.
+ConsumeWebAPI/App_Data/PlexConnectConfig.json
