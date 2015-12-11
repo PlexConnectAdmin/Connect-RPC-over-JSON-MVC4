@@ -1,5 +1,5 @@
 # Connect-REST-MVC4
-MVC4 Sample apps for Plex Connect REST: 2- and 3-legged.
+MVC4 Sample apps for Plex Connect RPC over JSON.
 
 This example is expected to run from a private client such as a web server accessing the Plex API as a Server Application. See [Daemon or Server Application to Web API](https://azure.microsoft.com/en-us/documentation/articles/active-directory-authentication-scenarios/#daemon-or-server-application-to-web-api) explanation in Microsoft's [Authentication Scenarios for Azure AD](https://azure.microsoft.com/en-us/documentation/articles/active-directory-authentication-scenarios/).
 
