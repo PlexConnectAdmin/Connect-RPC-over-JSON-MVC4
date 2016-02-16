@@ -7,6 +7,6 @@ To get this example operational:
 
 1. Make sure, possibly by using Postman or some other REST Client, that the resource in ConsumeWebAPI.Helper.GetSeveralParts will return some usable parts for your tenant.
 2. In the App_Data folder copy the  PlexConnectConfig.json.sample as PlexConnectConfig.json and fill it in with the relevant details obtained from Plex for your application. Review the ConsumeWebAPI.Helper.Execute method and make sure your config file or its contents is accessed from a secure location.
-3, At this time, this is the resource and token endpoint:
-   "plexResource": "http://api.plex.com/",
+3. At this time, this is the resource and token endpoint:
+"plexResource": "http://api.plex.com/",
    "tokenEndPoint": "https://login.microsoftonline.com/190f4bb0-c84d-4d0a-959a-a29c19923917/oauth2/token"

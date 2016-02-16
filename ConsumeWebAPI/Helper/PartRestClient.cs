@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Net;
-using System.Web;
-using System.Linq;
 using ConsumeWebAPI.Models;
 using RestSharp;
 using Newtonsoft.Json;
