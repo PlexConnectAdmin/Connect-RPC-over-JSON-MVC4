@@ -14,4 +14,4 @@ To get this example operational:
   `Uri resource = new Uri("https://test.api.plex.com/Engineering/PartList/Parts?PartNo=z&limit=50");`
 to
   `Uri resource = new Uri("https://test.api.plex.com/Engineering/PartList/PartGroups");`
-and put a breakpoint on line 31 and inspect jsonVal and joResponses to see results when you click on Part List from the app's start page.
+and put a breakpoint on line 31 and inspect `jsonVal` and `joResponses` to see results when you click on Part List from the app's start page.
