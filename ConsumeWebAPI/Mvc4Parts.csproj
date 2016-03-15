@@ -176,7 +176,7 @@
     <Compile Include="Helper\IPartRestClient.cs" />
     <Compile Include="Helper\PartRestClient.cs" />
     <Compile Include="Helper\Rpc.cs" />
-    <Compile Include="Helper\TokenEndpoint.cs" />
+    <Compile Include="Helper\PlexApiConfiguration.cs" />
     <Compile Include="Models\HttpResponseModel.cs" />
     <Compile Include="Models\PartAddModel.cs" />
     <Compile Include="Models\PartCopyModel.cs" />

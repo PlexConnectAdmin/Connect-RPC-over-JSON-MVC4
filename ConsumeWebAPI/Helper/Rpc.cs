@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.IO;
 using RestSharp;
 using Newtonsoft.Json.Linq;
@@ -12,24 +16,23 @@ namespace ConsumeWebAPI.Helper
 {
   public class Rpc
   {
-    private Uri _tokenEndpoint;
-    private string _clientId;
-    private readonly RestClient _client;
-    IRestResponse _response;
+    private static Uri tokenEndpoint;
+    private static string clientId;
+    static IRestResponse response;
 
-    public IRestResponse Response
+    public static IRestResponse Response
     {
-      get { return _response; }
-      set { _response = value; }
+      get { return response; }
+      set { response = value; }
     }
 
-    public JToken Execute(RestSharp.Method method, Uri rpcUri)
+    public static async Task<JToken> Execute(RestSharp.Method method, Uri rpcUri)
     {
-      JToken jToken = Execute(method, rpcUri, null);
+      JToken jToken  = await Execute(method, rpcUri, null);
       return jToken;
     }
 
-    public JToken Execute(RestSharp.Method method, Uri rpcUri, object body)
+    public static async Task<JToken> Execute(RestSharp.Method method, Uri rpcUri, object body)
     {
       // 0. Get settings from JSON config file
       JToken bearerToken;
@@ -37,47 +40,16 @@ namespace ConsumeWebAPI.Helper
 
       // Looking up the token endpoint and app registration content in App_Data, which is by default not viewable by browsing the web site, see http://stackoverflow.com/questions/528858/what-is-the-app-data-folder-used-for-in-visual-studio
       // Regardless of the location you use, make sure it is similarly secure.
-      TokenEndpoint tokenEndpoint = JsonConvert.DeserializeObject<TokenEndpoint>(File.ReadAllText(exeRuntimeDirectory + @"\App_Data\PlexConnectConfig.json"));
+      PlexApiConfiguration plexApiConfiguration = JsonConvert.DeserializeObject<PlexApiConfiguration>(File.ReadAllText(exeRuntimeDirectory + @"\App_Data\PlexConnectConfig.json"));
 
-      _tokenEndpoint = tokenEndpoint.tokenEndPoint;
-      RestClient _client = new RestClient(_tokenEndpoint);
-      _clientId = tokenEndpoint.clientId;
+      tokenEndpoint = plexApiConfiguration.tokenEndPoint;
+      RestClient _client = new RestClient(tokenEndpoint);
+      Rpc.clientId = plexApiConfiguration.clientId;
 
       // use the secret with the furthest out expiry. Use the JSON configuration file to manage your rolling secrets 
-      List<ClientSecret> SortedClientSecretList = tokenEndpoint.clientSecrets.OrderByDescending(o => o.expiry).ToList();
+      List<ClientSecret> SortedClientSecretList = plexApiConfiguration.clientSecrets.OrderByDescending(o => o.expiry).ToList();
 
       // 1. get the bearer token
-
-      // Client app ID. 
-      string clientId = _clientId;
-
-      // resource uri for the protected Plex resource you are accessing
-      string resourceUri = tokenEndpoint.plexResource.ToString();
-      AuthenticationResult authenticationResult;
-
-      // OAuth2 token endpoint for 2-legged, server-to-server application authorization
-      string authorityUri = _tokenEndpoint + "?grant_type=client_credentials";
-
-      // Create a new AuthenticationContext passing an Authority URI.
-      Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext authContext = new Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext(authorityUri);
-
-      string clientSecret = SortedClientSecretList[0].clientSecret;
-      ClientCredential clientCredential = new ClientCredential(clientId, clientSecret);
-
-      // 2. extract bearer token from AuthenticationResult
-      try
-      {
-        // AAD includes an in memory cache, so this call may only receive a new token from the server if the cached token is expired.
-        authenticationResult = authContext.AcquireToken(resourceUri, clientCredential);
-        bearerToken = authenticationResult.AccessToken;
-      }
-      catch (Exception e)
-      {
-        // handle any error
-        throw e;
-      }
-
-      // 3. use bearer token to get some result(s)
       RestClient restClient = new RestClient(rpcUri);
       RestRequest request = new RestRequest(method);
 
@@ -86,7 +58,7 @@ namespace ConsumeWebAPI.Helper
         request.AddParameter("application/json", body, ParameterType.RequestBody);
 
         //request.AddJsonBody(body);
-        request.AddHeader("content-type", "application/json");
+        request.AddHeader("content-type", "application/x-www-form-urlencoded");
       }
       else
       {
@@ -94,25 +66,121 @@ namespace ConsumeWebAPI.Helper
       }
 
       request.AddHeader("cache-control", "no-cache");
-      request.AddHeader("authorization", "Bearer " + bearerToken);
-      _response = restClient.Execute(request);
+      request.AddHeader("Ocp-Apim-Subscription-Key", plexApiConfiguration.subscriptionKey);
+      Rpc.response = restClient.Execute(request);
 
+      if ((Rpc.response.ErrorException==null)&&(string.IsNullOrEmpty(Rpc.response.ErrorMessage)))
+      {
+
+      // 1. get the bearer token
+      // Client app ID. 
+      //string clientId = Rpc.clientId;
+
+      //// resource uri for the protected Plex resource you are accessing
+      //string resourceUri = plexApiConfiguration.plexResource.ToString();
+
+      //var client = new HttpClient();
+
+      //// Request headers
+      //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
+      //client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", plexApiConfiguration.subscriptionKey);
+
+      //var uri = plexApiConfiguration.apiEndPointDomain + "oauth2/v1/token?";// + queryString;
+
+      //HttpResponseMessage response;
+
+      //// Request body
+      //byte[] byteData = Encoding.UTF8.GetBytes("{body}");
+
+      //using (var content = new ByteArrayContent(byteData))
+      //{
+      //  content.Headers.ContentType = new MediaTypeHeaderValue("application/json");//"< your content type, i.e. application/json >");
+      //  response = await client.PostAsync(uri, content);
+      //}
+
+      //AuthenticationResult authenticationResult;
+
+      //// OAuth2 token endpoint for 2-legged, server-to-server application authorization
+      //string authorityUri = tokenEndpoint + "?grant_type=client_credentials";
+
+      //// Create a new AuthenticationContext passing an Authority URI.
+      //Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext authContext = new Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext(authorityUri);
+
+      //string clientSecret = SortedClientSecretList[0].clientSecret;
+      //ClientCredential clientCredential = new ClientCredential(clientId, clientSecret);
+
+      /*********************************************************************/
+      // 2. extract bearer token from AuthenticationResult
+      /*********************************************************************/
+
+      //try
+      //{
+      //  // AAD includes an in memory cache, so this call may only receive a new token from the server if the cached token is expired.
+      //  authenticationResult = authContext.AcquireToken(resourceUri, clientCredential);
+      //  bearerToken = authenticationResult.AccessToken;
+      //}
+      //catch (Exception e)
+      //{
+      //  // handle any error
+      //  throw e;
+      //}
+
+      /*********************************************************************/
+      // 3. use bearer token to get some result(s)
+      /*********************************************************************/
+
+      //RestClient restClient = new RestClient(rpcUri);
+      //RestRequest request = new RestRequest(method);
+
+      //if (body != null)
+      //{
+      //  request.AddParameter("application/json", body, ParameterType.RequestBody);
+
+      //  //request.AddJsonBody(body);
+      //  request.AddHeader("content-type", "application/json");
+      //}
+      //else
+      //{
+      //  request.AddHeader("content-type", "multipart/form-data");
+      //}
+
+      //request.AddHeader("cache-control", "no-cache");
+      //request.AddHeader("authorization", "Bearer " + bearerToken);
+      //Rpc.response = restClient.Execute(request);
+
+    }
+      // if ((Rpc.response.ErrorException==null)&&(string.IsNullOrEmpty(Rpc.response.ErrorMessage)))
+      else
+      {
+        Exception exception;
+        if (Rpc.response.ErrorException == null)
+        {
+          exception = new Exception(Rpc.response.ErrorMessage);
+        }
+        else
+        {
+          exception = Rpc.response.ErrorException;
+        }
+
+        throw exception;
+      }
 
       JToken jsonVal;
-      if (string.IsNullOrEmpty(_response.Content))
+      if (string.IsNullOrEmpty(Rpc.response.Content))
       {
         ConsumeWebAPI.Models.HttpResponse httpResponse = new Models.HttpResponse();
-        httpResponse.Message = _response.StatusDescription;
-        httpResponse.StatusCode = _response.StatusCode.ToString();
+        httpResponse.Message = Rpc.response.StatusDescription;
+        httpResponse.StatusCode = Rpc.response.StatusCode.ToString();
         string json = JsonConvert.SerializeObject(httpResponse);
         jsonVal = JToken.Parse(json);
       }
       else
       {
-        jsonVal = JToken.Parse(_response.Content);
+        jsonVal = JToken.Parse(Rpc.response.Content);
       }
 
-      return jsonVal;
+  return jsonVal;
     }
+
   }
 }

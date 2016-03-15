@@ -10,6 +10,8 @@
          "expiry": "YYYY-MM-DDT00:00:00Z"
       }
    ],
-   "plexResource": "URI-OF-PLEX-RESOURCE",
-   "tokenEndPoint": "URI-OF-PLEX-TOKEN-ENDPOINT"
+   "subscriptionKey": "OBTAINED-FROM-DEVELOPER-PORTAL",
+   "plexResource": "URI-OF-PLEX-RESOURCE-SUCH-AS-http://api.plex.com/",
+   "tokenEndPoint": "URI-OF-PLEX-TOKEN-ENDPOINT-SUCH-AS-https://plexconnect.azure-api.net/oauth2/v1/token"
+   "apiEndPointDomain": "URI-OF-PLEX-API-ENDPOINT-DOMAIN-SUCH-AS-https://plexconnect.azure-api.net/"
 }
