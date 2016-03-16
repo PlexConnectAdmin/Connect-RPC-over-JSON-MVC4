@@ -20,28 +20,52 @@ namespace ConsumeWebAPI.Helper
     {
       Rpc rpc = new Rpc();
 
-      // default limit is 10, here we set it to 50 by way of example
-      Uri resource = new Uri("https://test.api.plex.com/Engineering/PartList/Parts?PartNo=z&limit=50");
+      // todo:  default limit is 10, here we set it to 50 by way of example
+      // todo: read from config
+      Uri resource = new Uri("https://plexconnect.azure-api.net/test/PartSetup/v1/PartList/Parts?PartNo=1");
       Task<JToken> jsonValTask = Rpc.Execute(Method.GET, resource);
-      JToken jsonVal = jsonValTask.Result;
 
-      // todo: response has links "next" and "last" (previous) for paging: ...offset=380&limit=10... etc. Implement this paging.
-
-      JArray joResponses = ((dynamic)jsonVal).embedded;
-
-      List<PartModel> Parts = null;
-      if (joResponses == null)
+      // another possible check: if (jsonValTask.Status == TaskStatus.Faulted)
+      if (jsonValTask.Exception == null)
       {
-        // todo: handle no parts returned
+        JToken jsonVal = jsonValTask.Result;
+
+        // todo: HAL-formatted response has links "next" and "last" (previous) for paging: ...offset=380&limit=10... etc. Implement this paging.
+
+        JArray joResponses = ((dynamic)jsonVal).embedded;
+
+        List<PartModel> parts = null;
+        if (joResponses == null)
+        {
+          // todo: handle no parts returned
+        }
+        else
+        {
+          parts = joResponses.ToObject<List<PartModel>>();
+        }
+
+        // todo: try/catch for error handling on all code
+
+        return parts;
       }
-      else
+      else // some error occurred
       {
-        Parts = joResponses.ToObject<List<PartModel>>();
+        // first, see if no records were found
+        if (jsonValTask.Exception.InnerExceptions.Count==1)
+        {
+          if (jsonValTask.Exception.InnerExceptions[0].Message == "{ \"statusCode\": 404, \"message\": \"Resource not found\" }")
+          {
+            // no records found
+            return null;
+          }
+          else
+          {
+            throw jsonValTask.Exception;
+          }
+        }
+
+        return null;
       }
-
-      // todo: try/catch for error handling on all code
-
-      return Parts;
     }
 
     public PartModel GetById(int id)

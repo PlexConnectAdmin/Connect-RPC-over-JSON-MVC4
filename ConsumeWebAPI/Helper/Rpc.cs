@@ -177,21 +177,39 @@ namespace ConsumeWebAPI.Helper
       }
 
       JToken jsonVal;
-      if (string.IsNullOrEmpty(Rpc.response.Content))
+
+      // HttpStatusCode.NotFound (404) is used for no records found.
+      if ((Rpc.response.StatusCode == System.Net.HttpStatusCode.OK)&&(Rpc.response.StatusCode != System.Net.HttpStatusCode.NotFound))
       {
-        ConsumeWebAPI.Models.HttpResponse httpResponse = new Models.HttpResponse();
-        httpResponse.Message = Rpc.response.StatusDescription;
-        httpResponse.StatusCode = Rpc.response.StatusCode.ToString();
-        string json = JsonConvert.SerializeObject(httpResponse);
-        jsonVal = JToken.Parse(json);
+        if (string.IsNullOrEmpty(Rpc.response.Content))
+        {
+          ConsumeWebAPI.Models.HttpResponse httpResponse = new Models.HttpResponse();
+          httpResponse.Message = Rpc.response.StatusDescription;
+          httpResponse.StatusCode = Rpc.response.StatusCode.ToString();
+          string json = JsonConvert.SerializeObject(httpResponse);
+          jsonVal = JToken.Parse(json);
+        }
+        else
+        {
+          jsonVal = JToken.Parse(Rpc.response.Content);
+        }
       }
       else
       {
-        jsonVal = JToken.Parse(Rpc.response.Content);
+        Exception exception;
+        if (Rpc.response.ErrorException == null)
+        {
+          exception = string.IsNullOrEmpty(Rpc.response.ErrorMessage) ? new Exception(Rpc.response.Content) : new Exception(Rpc.response.ErrorMessage);
+        }
+        else
+        {
+          exception = Rpc.response.ErrorException;
+        }
+
+        throw exception;
       }
 
-  return jsonVal;
+      return jsonVal;
     }
-
   }
 }
