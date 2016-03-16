@@ -167,6 +167,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Configuration\ApplicationConfiguration.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PartController.cs" />
     <Compile Include="Global.asax.cs">
@@ -181,6 +182,7 @@
     <Compile Include="Models\PartAddModel.cs" />
     <Compile Include="Models\PartCopyModel.cs" />
     <Compile Include="Models\PartModel.cs" />
+    <Compile Include="Models\Token.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
