@@ -2,6 +2,10 @@
 
 namespace Plex.Restful.Api.Testing.Models
 {
+  /// <summary>
+  /// Token response instance
+  /// See "Access Token Response" at https://msdn.microsoft.com/en-us/library/azure/dn645542.aspx
+  /// </summary>
   public class Token
   {
     [JsonProperty("expires_in")]
@@ -10,6 +14,13 @@ namespace Plex.Restful.Api.Testing.Models
     [JsonProperty("token_type")]
     public string TokenType { get; set; }
 
+    /// <summary>
+    /// Gets or sets the expires on.
+    /// How long the access token is valid (in seconds).
+    /// </summary>
+    /// <value>
+    /// The expires on.
+    /// </value>
     [JsonProperty("expires_on")]
     public string ExpiresOn { get; set; }
 

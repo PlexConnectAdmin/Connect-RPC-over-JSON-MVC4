@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using ConsumeWebAPI.Configuration;
+using ConsumeWebAPI.Models;
 using Plex.Restful.Api.Testing.Models;
 using RestSharp;
 using Newtonsoft.Json.Linq;
@@ -54,27 +55,7 @@ namespace ConsumeWebAPI.Helper
       {
 
         // 1. get the bearer token
-        // todo: check tokencache
-        var uri = ApplicationConfiguration.PlexApiConfiguration.apiEndPointDomain + "oauth2/v1/token?";
-        var client = new RestClient(uri);
-        request = new RestRequest(Method.POST);
-        request.AddHeader("content-type", "application/x-www-form-urlencoded");
-        request.AddHeader("ocp-apim-subscription-key", ApplicationConfiguration.PlexApiConfiguration.subscriptionKey);
-        string urlEncodedBody = string.Format("grant_type=client_credentials&client_id={0}&client_secret={1}&resource={2}", ApplicationConfiguration.PlexApiConfiguration.clientId, HttpUtility.UrlEncode(ApplicationConfiguration.ClientSecret()), HttpUtility.UrlEncode(ApplicationConfiguration.PlexApiConfiguration.plexResource.ToString()));
-        request.AddParameter("application/x-www-form-urlencoded", urlEncodedBody, ParameterType.RequestBody);
-        IRestResponse restResponse = client.Execute(request);
-
-        //2. extract bearer token
-        Token token = JObject.Parse(((RestResponseBase)restResponse).Content).ToObject<Token>();
-        JToken bearerToken;
-        if (token.AccessToken != null)
-        {
-          bearerToken = token.AccessToken;
-        }
-        else
-        {
-          throw new Exception("Failure to get Bearer Token");
-        }
+        string bearerToken = BearerToken.RetrieveBearerToken();
 
         /*********************************************************************/
         //3. use bearer token to get some result(s)
