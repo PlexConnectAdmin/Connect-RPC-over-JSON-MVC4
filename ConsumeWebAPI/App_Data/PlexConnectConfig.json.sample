@@ -1,4 +1,5 @@
 ﻿{  
+   "apiEndPointDomain": "URI-OF-PLEX-API-ENDPOINT-DOMAIN-SUCH-AS-https://plexconnect.azure-api.net/",
    "clientId": "YOUR-APPLICATION-ID-FROM-PLEX",
    "clientSecrets": [  
       {  
@@ -10,8 +11,7 @@
          "expiry": "YYYY-MM-DDT00:00:00Z"
       }
    ],
-   "subscriptionKey": "OBTAINED-FROM-DEVELOPER-PORTAL",
    "plexResource": "URI-OF-PLEX-RESOURCE-SUCH-AS-http://api.plex.com/",
+   "subscriptionKey": "OBTAINED-FROM-DEVELOPER-PORTAL",
    "tokenEndPoint": "URI-OF-PLEX-TOKEN-ENDPOINT-SUCH-AS-https://plexconnect.azure-api.net/oauth2/v1/token"
-   "apiEndPointDomain": "URI-OF-PLEX-API-ENDPOINT-DOMAIN-SUCH-AS-https://plexconnect.azure-api.net/"
 }
