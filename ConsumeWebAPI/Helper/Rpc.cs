@@ -43,7 +43,7 @@ namespace ConsumeWebAPI.Helper
       PlexApiConfiguration plexApiConfiguration = JsonConvert.DeserializeObject<PlexApiConfiguration>(File.ReadAllText(exeRuntimeDirectory + @"\App_Data\PlexConnectConfig.json"));
 
       tokenEndpoint = plexApiConfiguration.tokenEndPoint;
-      RestClient _client = new RestClient(tokenEndpoint);
+      //RestClient restClient = new RestClient(tokenEndpoint);
       Rpc.clientId = plexApiConfiguration.clientId;
 
       // use the secret with the furthest out expiry. Use the JSON configuration file to manage your rolling secrets 
@@ -73,11 +73,23 @@ namespace ConsumeWebAPI.Helper
       {
 
       // 1. get the bearer token
-      // Client app ID. 
-      //string clientId = Rpc.clientId;
+      // todo: check tokencache
+        var uri = plexApiConfiguration.apiEndPointDomain + "oauth2/v1/token?";// + queryString;
+        //var client = new RestClient("https://plexconnect.azure-api.net/oauth2/v1/token");
+        var client = new RestClient(uri);
+        request = new RestRequest(Method.POST);
+        request.AddHeader("content-type", "application/x-www-form-urlencoded");
+        request.AddHeader("ocp-apim-subscription-key", "e69d07d1085149c081b2ff2173c4f1a5");
+        request.AddParameter("application/x-www-form-urlencoded", "grant_type=client_credentials&client_id=995f6a9d-7d9d-4613-b907-eab6c6a77421&client_secret=ooFTOFHfmg%2BBlqQ3FD%2FXkWMYNgwvky%2FLCYYAuizbeUs%3D&resource=http%3A%2F%2Fapi.plex.com%2F", ParameterType.RequestBody);
+        IRestResponse response = client.Execute(request);
+        //  // todo: assign bearerToken
+          bearerToken = string.Empty;
 
-      //// resource uri for the protected Plex resource you are accessing
-      //string resourceUri = plexApiConfiguration.plexResource.ToString();
+
+      string clientId = Rpc.clientId;
+
+      // resource uri for the protected Plex resource you are accessing, e.g. "http://api.plex.com/"
+      string resourceUri = plexApiConfiguration.plexResource.ToString();
 
       //var client = new HttpClient();
 
@@ -85,20 +97,19 @@ namespace ConsumeWebAPI.Helper
       //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
       //client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", plexApiConfiguration.subscriptionKey);
 
-      //var uri = plexApiConfiguration.apiEndPointDomain + "oauth2/v1/token?";// + queryString;
 
       //HttpResponseMessage response;
 
-      //// Request body
+      // //Request body
       //byte[] byteData = Encoding.UTF8.GetBytes("{body}");
 
       //using (var content = new ByteArrayContent(byteData))
       //{
       //  content.Headers.ContentType = new MediaTypeHeaderValue("application/json");//"< your content type, i.e. application/json >");
       //  response = await client.PostAsync(uri, content);
+      //  // todo: assign bearerToken
+      //  bearerToken = string.Empty;
       //}
-
-      //AuthenticationResult authenticationResult;
 
       //// OAuth2 token endpoint for 2-legged, server-to-server application authorization
       //string authorityUri = tokenEndpoint + "?grant_type=client_credentials";
@@ -110,13 +121,13 @@ namespace ConsumeWebAPI.Helper
       //ClientCredential clientCredential = new ClientCredential(clientId, clientSecret);
 
       /*********************************************************************/
-      // 2. extract bearer token from AuthenticationResult
+       //2. extract bearer token from AuthenticationResult
       /*********************************************************************/
 
       //try
       //{
       //  // AAD includes an in memory cache, so this call may only receive a new token from the server if the cached token is expired.
-      //  authenticationResult = authContext.AcquireToken(resourceUri, clientCredential);
+      //  AuthenticationResult authenticationResult = authContext.AcquireToken(resourceUri, clientCredential);
       //  bearerToken = authenticationResult.AccessToken;
       //}
       //catch (Exception e)
@@ -126,29 +137,29 @@ namespace ConsumeWebAPI.Helper
       //}
 
       /*********************************************************************/
-      // 3. use bearer token to get some result(s)
+       //3. use bearer token to get some result(s)
       /*********************************************************************/
 
       //RestClient restClient = new RestClient(rpcUri);
       //RestRequest request = new RestRequest(method);
 
-      //if (body != null)
-      //{
-      //  request.AddParameter("application/json", body, ParameterType.RequestBody);
+      if (body != null)
+      {
+        request.AddParameter("application/json", body, ParameterType.RequestBody);
 
-      //  //request.AddJsonBody(body);
-      //  request.AddHeader("content-type", "application/json");
-      //}
-      //else
-      //{
-      //  request.AddHeader("content-type", "multipart/form-data");
-      //}
+        //request.AddJsonBody(body);
+        request.AddHeader("content-type", "application/json");
+      }
+      else
+      {
+        request.AddHeader("content-type", "multipart/form-data");
+      }
 
-      //request.AddHeader("cache-control", "no-cache");
-      //request.AddHeader("authorization", "Bearer " + bearerToken);
-      //Rpc.response = restClient.Execute(request);
+      request.AddHeader("cache-control", "no-cache");
+      request.AddHeader("authorization", "Bearer " + bearerToken);
+      Rpc.response = restClient.Execute(request);
 
-    }
+      }
       // if ((Rpc.response.ErrorException==null)&&(string.IsNullOrEmpty(Rpc.response.ErrorMessage)))
       else
       {
