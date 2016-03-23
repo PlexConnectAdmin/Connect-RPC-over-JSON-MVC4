@@ -24,7 +24,7 @@ namespace ConsumeWebAPI.Helper
       Uri resource = new Uri(string.Format("{0}test/PartSetup/v1/PartList/Parts?PartNo=1&limit=50", ApplicationConfiguration.PlexApiConfiguration.apiEndPointDomain));
       
       // used in local testing at Plex
-      // resource = new Uri(string.Format("http://local.api.plex.com/engineering/PartList/Parts?PartNo=1&limit=50", ApplicationConfiguration.PlexApiConfiguration.apiEndPointDomain));
+       // resource = new Uri(string.Format("http://local.api.plex.com/engineering/PartList/Parts?PartNo=1&limit=50", ApplicationConfiguration.PlexApiConfiguration.apiEndPointDomain));
       
       Task<JToken> jsonValTask = Rpc.Execute(Method.GET, resource);
 
